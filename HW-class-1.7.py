@@ -92,6 +92,10 @@ Mashka = Duck('bird', 6, 'grain', 'quack', 3)
 Mashka.feed('grain')
 Mashka.say()
 
+B = Cow('animal', 300, 'grass', 'moooo', 100)
+print(B.weigth)
+B.say()
+
 # Необходимо реализовать классы животных на ферме:
 
 # Коровы, козы, овцы, свиньи;
