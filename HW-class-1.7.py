@@ -29,7 +29,7 @@ class Farm():
         print('Мой максимум {} кг'.format(max_weigth), main_words)
 
     def say(self):
-        print(main_words, '..смотрит умными глазами..', main_words)
+        print(main_words + '..смотрит умными глазами..' + main_words)
 
     def __init__(self, type, max_weigth, main_food, main_words, weigth):
         self.type = type
