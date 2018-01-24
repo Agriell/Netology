@@ -16,6 +16,6 @@ def create_file_list():  # return [list] with file names
 
 
 for file in create_file_list():
-    # print(file)
-    subprocess.Popen('sips --resampleWidth 200 ' + file)
-    # rs.args += ['--resampleWidth', 200, file]
+    print(file)
+    subprocess.Popen(['sips', '--resampleWidth', '200', file])
+    # print(process.args)
