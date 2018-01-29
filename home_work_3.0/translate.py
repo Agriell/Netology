@@ -5,7 +5,7 @@ API_KEY = 'trnsl.1.1.20161025T233221Z.47834a66fd7895d0.a95fd4bfde5c1794fa4334539
 URL = 'https://translate.yandex.net/api/v1.5/tr.json/translate'
 
 
-def translate_it(from_lang, to_lang, from_file_name, to_file_name):
+def translate_it(from_file_name, from_lang, to_file_name, to_lang='ru'):
 
     params = {
         'key': API_KEY,
@@ -44,34 +44,29 @@ def save_file(to_file_name, text):
 data = [
     {
         'from_lang': 'de',
-        'to_lang': 'ru',
         'from_file_name': 'de.txt',
         'to_file_name': 'ru(de).txt'
     },
     {
         'from_lang': 'es',
-        'to_lang': 'ru',
         'from_file_name': 'es.txt',
         'to_file_name': 'ru(es).txt'
     },
     {
         'from_lang': 'fr',
-        'to_lang': 'ru',
         'from_file_name': 'fr.txt',
         'to_file_name': 'ru(fr).txt'
     },
 ]
 
 
-# from_lang = 'de'
-# to_lang = 'ru'
-# from_file_name = 'de.txt'
-# to_file_name = 'ru(de).txt'
 for item in data:
+
     result = translate_it(
-        item['from_lang'],
-        item['to_lang'],
         item['from_file_name'],
+        item['from_lang'],
         item['to_file_name']
     )
-    print(result)
+    # print(result)
+
+
