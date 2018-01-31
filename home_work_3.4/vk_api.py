@@ -15,7 +15,7 @@ authorisation_data = {
 print('?'.join((authorization_url, urlencode(authorisation_data))))
 
 
-token = '8dbd37cbd9f15ad1a5'
+token = '1234567890'
 
 first_men = 23456700
 second_men = 76543210
@@ -42,7 +42,7 @@ def user_url(id):
 
 print('Общие друзья:')
 for i in mutual_friends(first_men, second_men):
-    print(i)
-    print('id - {} ссылка {}'.format(i, user_url(i)['domain']))
+    # print(i)
+    print('id - {}, ссылка - {}'.format(i, user_url(i)['domain']))
 
 
