@@ -1,24 +1,24 @@
 
 from urllib.parse import urlencode
 import requests
-#
-# authorization_url = 'https://oauth.vk.com/authorize'
-# application_id = 6354299
-# authorisation_data = {
-#     'client_id': application_id,
-#     'display': 'page',
-#     'scope': 'friends',
-#     'respose_type': 'token',
-#     'v': '5.71'
-# }
-#
-# print('?'.join((authorization_url, urlencode(authorisation_data))))
+
+authorization_url = 'https://oauth.vk.com/authorize'
+application_id = 6354299
+authorisation_data = {
+    'client_id': application_id,
+    'display': 'page',
+    'scope': 'friends',
+    'respose_type': 'token',
+    'v': '5.71'
+}
+
+print('?'.join((authorization_url, urlencode(authorisation_data))))
 
 
-token = '1234567890'
+token = '8dbd37cbd9f15ad1a5'
 
-first_men = 1234567
-second_men = 7654321
+first_men = 23456700
+second_men = 76543210
 
 def mutual_friends(first_men, second_men):
     params = {
@@ -26,7 +26,8 @@ def mutual_friends(first_men, second_men):
         'source_uid': first_men,
         'target_uid': second_men
     }
-    response = requests.get('http://api.vk.com/method/friends.getMutual', params)
+    response = (requests.get('http://api.vk.com/method/friends.getMutual', params)).json()
+
     return response
 
 
@@ -35,12 +36,13 @@ def user_url(id):
         'user_ids': id,
         'fields': 'domain'
     }
-    response = requests.get('http://api.vk.com/method/users.get', params)
+    response = (requests.get('http://api.vk.com/method/users.get', params)).json()
     return response
 
 
 print('Общие друзья:')
 for i in mutual_friends(first_men, second_men):
-    print('id - {} ссылка {}'.format(i, user_url(i)))
+    print(i)
+    print('id - {} ссылка {}'.format(i, user_url(i)['domain']))
 
 
