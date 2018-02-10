@@ -1,21 +1,25 @@
 
+
 #  application parameters
 # ID: ac3006d23aab41f3a3004cd9883a894c
 # Пароль: 63e1a386d47344c89018de24319572c0
 # Callback URL:
 
+
 from urllib.parse import urlencode
 import requests
 
-authorization_url = 'https://oauth.yandex.ru/authorize'
-counter_id = 'ac3006d23aab41f3a3004cd9883a894c'
-authorisation_data = {
-    'response_type': 'token',
-    'client_id': counter_id,
-    # 'scope': 'metrika:read',
-}
 
-print('?'.join((authorization_url, urlencode(authorisation_data))))
+def get_token(counter_id):
+    authorization_url = 'https://oauth.yandex.ru/authorize'
+    authorisation_data = {
+        'response_type': 'token',
+        'client_id': counter_id,
+    }
+    link = ('?'.join((authorization_url, urlencode(authorisation_data))))
+    print(link)
+    return link
+
 
 # https://oauth.yandex.ru/verification_code
 # access_token=AQAAAAAjTfPiAATMHVlRkt7jB0-6nJhW_o1hTkE
@@ -23,25 +27,36 @@ print('?'.join((authorization_url, urlencode(authorisation_data))))
 # expires_in=31533812
 
 
+class YaMetricsCount():
+    def __init__(self, token, count_number):
+        self.token = token
+        self.count_number = count_number
+
+    def get_counter_info(self):
+        url = 'https://api-metrika.yandex.ru/stat/v1/data'
+        headers = {
+            'Authorisation': 'OAuth {}'.format(self.token),
+            'Content-Type': 'application/json',
+        }
+        params = {
+            'ids': self.count_number,
+            'metrics': 'ym:s:visits, ym:s:pageviews, ym:s:users',
+            'oauth_token': self.token,
+            # 'pretty': 1
+        }
+        response = (requests.get(url, params=params, headers=headers)).json()
+        # print(response)
+        data = response['data'][0]['metrics']
+        print('Визиты - {}; Просмотры страницы - {}; Пользователи - {}'.format(data[0], data[1], data[2]))
+        return data
+
+
+counter_id = 'ac3006d23aab41f3a3004cd9883a894c'
 token = 'AQAAAAAjTfPiAATMHVlRkt7jB0-6nJhW_o1hTkE'
+count_number = '47587201'
 
-def get_counter_info(token):
-    url = 'https://api-metrika.yandex.ru/stat/v1/data?'
-    params = {
-        'id': counter_id,
-        'metrics': 'ym:s:visits',
-        'oauth_token': token
-        # , ym:s:pageviews, ym:s:users
-    }
+git_counts = YaMetricsCount(token, count_number)
 
-    response = requests.get(url, params)
-    print(response)
+counts_data = git_counts.get_counter_info()
 
-    return response.json()
-
-print(get_counter_info(token))
-
-https://api-metrika.yandex.ru/stat/v1/data.csv?id=2138128&metrics=ym:s:avgPageViews&dimensions=ym:s:operatingSystem&limit=5
-&oauth_token=05dd3dd84ff948fdae2bc4fb91f13e22bb1f289ceef0037
-
-https://api-metrika.yandex.ru/stat/v1/data?id=ac3006d23aab41f3a3004cd9883a894c&metrics=ym:s:visits&oauth_token=AQAAAAAjTfPiAATMHVlRkt7jB0-6nJhW_o1hTkE
+# print(counts_data)
