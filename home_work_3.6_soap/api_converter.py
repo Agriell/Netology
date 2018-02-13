@@ -101,5 +101,5 @@ for distance in read_file(file_name_3_task):
     summ += z
 
 print('')
-print('Суммарное расстояние путешествия по маршруту из файла {} составит: {} C'.format(file_name_3_task, summ))
+print('Суммарное расстояние путешествия по маршруту из файла {} составит: {} км'.format(file_name_3_task, summ))
 print('')
