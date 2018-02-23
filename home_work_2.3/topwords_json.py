@@ -2,28 +2,22 @@
 # pip3 install
 
 import chardet
-
 import json
 
+
 def open_json(file_name):
+    with open(file_name, 'rb') as f:
+        code = chardet.detect(f.read())['encoding']
+        # print(code)
     comparison_list = []
-    with open(file_name, 'r') as obj:
-        obj_dict = dict(json.load(obj))
+    with open(file_name, 'r', encoding=code) as f:
+        obj_dict = dict(json.load(f))
+        # print(obj_dict)
         for post in obj_dict['rss']['channel']['items']:
             elem = more_6_symbol(post['description'])
             comparison_list += elem
     # print(comparison_list)
     return (comparison_list)
-
-
-def read_right_encode(file_name):
-    with open(file_name, 'rb') as f:
-        file = f.read()
-        code = chardet.detect(file)
-        # print(code)
-        result = file.decode(code['encoding'])
-        # print(result)
-        return result
 
 
 def more_6_symbol(excerpt): # input text, output [list] with elements (words) more 6 symbol length
@@ -33,6 +27,7 @@ def more_6_symbol(excerpt): # input text, output [list] with elements (words) mo
         if len(word) > 6:
             comparison_list.append(word)
     return comparison_list
+
 
 def counting_duplicate_words(comparison_list):
     #  input [list] with words, output [list] with same words
@@ -51,6 +46,7 @@ def counting_duplicate_words(comparison_list):
     comparison_list_sort.sort(key=lambda x: x[1], reverse=True)
     return comparison_list_sort
 
+
 def print_first_10(comparison_list_sort):
     for i in range(0, 10):
         print('Слово "{}" встретилось {} раз(а).'.format(comparison_list_sort[i][0], comparison_list_sort[i][1]))
@@ -59,13 +55,9 @@ def print_first_10(comparison_list_sort):
 
 files_bank = ['newsafr.json', 'newscy.json', 'newsfr.json', 'newsit.json']
 
-# for fn in files_bank:
 
-fn = 'newsafr.json'
-fn = 'newsit.json'
-print('')
-print('В файле "{}":'.format(fn))
-print_first_10(counting_duplicate_words(open_json(fn)))
-
-
+for fn in files_bank:
+    print('')
+    print('В файле "{}":'.format(fn))
+    print_first_10(counting_duplicate_words(open_json(fn)))
 
