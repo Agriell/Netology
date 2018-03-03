@@ -30,11 +30,16 @@ class LinkedList:
             current = current.next
 
     def reverse(self):
-        current = self.current
-        result = None
-        for item in current:
-            result = item + result
-        return result
+        if not self.head:
+            return
+        current = self.head
+        previous = None
+        while current:
+            next_node = current.next
+            current.next = previous
+            previous = current
+            current = next_node
+        self.head = previous
 
 
 
