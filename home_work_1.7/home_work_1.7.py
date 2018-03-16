@@ -1,3 +1,13 @@
+# Необходимо реализовать классы животных на ферме:
+
+# Коровы, козы, овцы, свиньи;
+# Утки, куры, гуси.
+# Условия:
+
+# Должен быть один базовый класс, который наследуют все остальные животные.
+# Базовый класс должен определять общие характеристики и интерфейс.
+
+
 weigth = int()
 main_food = ''
 main_words = ''
@@ -11,6 +21,16 @@ class Farm():
     main_food = 'None'
     main_words = 'None'
     food = 'None'  # grass or grain or potato
+
+    def __init__(self, type, max_weigth, main_food, main_words, weigth):
+        self.type = type
+        self.max_weigth = max_weigth
+        self.main_food = main_food
+        self.main_words = main_words
+        self.weigth = weigth
+
+    def say(self):
+        print(main_words + '..смотрит умными глазами..' + main_words)
 
     def feed(self, food):
         if food == main_food:
@@ -27,16 +47,6 @@ class Farm():
     def weigh(self):
         print('Я вешу {} кг'.format(weigth))
         print('Мой максимум {} кг'.format(max_weigth), main_words)
-
-    def say(self):
-        print(main_words + '..смотрит умными глазами..' + main_words)
-
-    def __init__(self, type, max_weigth, main_food, main_words, weigth):
-        self.type = type
-        self.max_weigth = max_weigth
-        self.main_food = main_food
-        self.main_words = main_words
-        self.weigth = weigth
 
 
 class Cow(Farm):
@@ -96,11 +106,3 @@ B = Cow('animal', 300, 'grass', 'moooo', 100)
 print(B.weigth)
 B.say()
 
-# Необходимо реализовать классы животных на ферме:
-
-# Коровы, козы, овцы, свиньи;
-# Утки, куры, гуси.
-# Условия:
-
-# Должен быть один базовый класс, который наследуют все остальные животные.
-# Базовый класс должен определять общие характеристики и интерфейс.

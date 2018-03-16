@@ -42,8 +42,14 @@ class LinkedList:
         self.head = previous
 
 
+# linked_list = LinkedList([1, 2, 3, 4, 5])
+# print(list(linked_list))
+# reverse = list(linked_list.reverse())
+# print(list(reverse))
+
 
 class LinkedListTestCase(unittest.TestCase):
+
 
     def test_reverse(self):
         cases = dict(
