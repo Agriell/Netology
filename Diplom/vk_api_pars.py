@@ -26,7 +26,7 @@ access_token=b4d79d38a784b789859b0c3a60bcbf41808a42d0ea08ae361616816ace6d6025711
 '''
 
 # access_token = 'b4d79d38a784b789859b0c3a60bcbf41808a42d0ea08ae361616816ace6d6025711bb7b9a893726919276'  # my
-access_token = '5dfd6b0dee902310df772082421968f4c06443abecbc082a8440cb18910a56daca73ac8d04b25154a1128'  # их
+access_token = '7b23e40ad10e08d3b7a8ec0956f2c57910c455e886b480b7d9fb59859870658c4a0b8fdc4dd494db19099'  # их
 
 
 def full_path():
@@ -114,14 +114,20 @@ def create_data_json_file(user_id):
 
     list_main_user_friends = get_friends_list(user_id)
 
-    print('Идёт опрос сервера ВК, пожалуйста, подождите')
+    print('Идёт опрос сервера ВК, пожалуйста, подождите..')
 
+
+    count = 1
     for friend in list_main_user_friends:
-        print('.', end='')
+        print('Опрашивается {} запись из {} ожидайте..'.format(count, len(list_main_user_friends)))
         try:
             friends_groups[friend] = get_users_groups(friend)
+            # print('.', end='')
+            count += 1
         except Exception as e:
             friends_groups_error += 1
+            # print('.', end='')
+            count += 1
             continue
 
     with open(full_file_name, 'w') as obj:
@@ -141,9 +147,12 @@ def analysis(file_name):
         data = json.load(f)
 
     total_set = set()
+    count = 0
     for s in data:
+        print('Обрабатывается запись {} из {}'.format(count, len(data)))
         if int(s) != int(main_user_id()):
             total_set.update(data[s])
+        count += 1
 
     user_set = set(data[str(main_user_id())])
     print('\nУказанный пользователь состоит в {} группе(ах).'.format(len(user_set)))
@@ -185,22 +194,30 @@ def create_and_save_json(group):
     :param group:
     :return:
     '''
-    group_result = []
 
+    group_result = []
+    except_count = 0
+    print('Обрабатывается информация по группам. Ожидайте..')
     for g in group:
         dct = {}
-        temp_dict_resp = get_group_info(g)[0]
-        dct['name'] = temp_dict_resp['name']
-        dct['gid'] = temp_dict_resp['gid']
-        dct['members_count'] = temp_dict_resp['members_count']
-        group_result.append(dct)
+        try:
+            temp_dict_resp = get_group_info(g)[0]
+            dct['name'] = temp_dict_resp['name']
+            dct['gid'] = temp_dict_resp['gid']
+            dct['members_count'] = temp_dict_resp['members_count']
+            group_result.append(dct)
+        except Exception:
+            except_count += 1
+            continue
 
     full_file_name = os.path.join(full_path(), 'unique_group_' + str(main_user_id()) + '.json')
 
     with open(full_file_name, 'w') as file:
         json.dump(group_result, file, ensure_ascii=False)
 
-    print('Файл {} успешно сохранён.\n'.format(full_file_name))
+    if except_count != 0:
+        print('Информация по {} группам оказалась не доступна'.format(except_count))
+    print('Файл \n{} \nуспешно сохранён.\n'.format(full_file_name))
 
     return group_result
 
@@ -240,7 +257,7 @@ while not marker:
         gresult = create_and_save_json(group_set)
         print(gresult)
     elif marker == 'n' or marker == 'N':
-        create_and_save_json()
+        create_and_save_json(group_set)
     else:
         print('Неверная комманда')
         marker = False
