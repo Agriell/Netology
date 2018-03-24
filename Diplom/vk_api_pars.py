@@ -56,6 +56,26 @@ def get_friends_list(user_id):
     return response
 
 
+def translate(short_name):
+    '''
+    It's get in shot VK name and return ID in number format.
+    :param short_name:
+    :return:
+    '''
+    params = {
+        'screen_name': short_name,
+        'v': 5.73,
+        'access_token': access_token
+    }
+    user_id = ((
+        requests.get(
+            'https://api.vk.com/method/utils.resolveScreenName',
+            params
+        ))
+        .json())['response']['object_id']
+    return user_id
+
+
 def get_user_id(link):
 
     "Return user ID in 'str' format"
@@ -64,7 +84,15 @@ def get_user_id(link):
         user_name = link.strip().split('/')[-1]
     else:
         user_name = link.strip()
-    params = {
+
+    for l in list(user_name):
+        if l.isalpha():
+            user_name = translate(user_name)
+            break
+        else:
+            None
+        # print(user_name)
+    params_users_get = {
         'access_token': access_token,
         'v': 5.73,
         'user_ids': user_name,
@@ -72,8 +100,8 @@ def get_user_id(link):
         'name_case': None
     }
     # print(user_name)
-    user_id = ((requests.get('https://api.vk.com/method/users.get', params)).json())['response'][0]['id']
-
+    user_id = ((requests.get('https://api.vk.com/method/users.get', params_users_get)).json())['response'][0]['id']
+    # print(user_id)
     return user_id
 
 
