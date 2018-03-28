@@ -71,8 +71,7 @@ def translate(short_name):
         requests.get(
             'https://api.vk.com/method/utils.resolveScreenName',
             params
-        ))
-        .json())['response']['object_id']
+        )).json())['response']['object_id']
     return user_id
 
 
@@ -90,7 +89,7 @@ def get_user_id(link):
             user_name = translate(user_name)
             break
         else:
-            None
+            user_name = user_name
         # print(user_name)
     params_users_get = {
         'access_token': access_token,
@@ -167,7 +166,7 @@ def create_data_json_file(user_id):
 def analysis(file_name):
     '''
     It's get a .json file name with dictionary ({'friend_1 ID': [groop_1 ID, groop_2 ID, ...], ...}
-    and return a set with groops ID which ONLY 'main_user_id' belong to
+    and return a set with groups ID which ONLY 'main_user_id' belong to
     :param file_name:
     :return:
     '''
@@ -175,7 +174,7 @@ def analysis(file_name):
         data = json.load(f)
 
     total_set = set()
-    count = 0
+    count = 1
     for s in data:
         print('Обрабатывается запись {} из {}'.format(count, len(data)))
         if int(s) != int(main_user_id()):
@@ -250,6 +249,31 @@ def create_and_save_json(group):
     return group_result
 
 
+def total_group_find(file_name, friends):
+
+    with open(file_name, 'r') as f:
+        data = json.load(f)
+
+    main_user_group = data[str(main_user_id())]
+    group_dct = {}
+    total_group_list = []
+
+    for g in main_user_group:
+        for s in data:
+            if int(s) != main_user_id():
+                if g in data[s]:
+                    if g not in group_dct:
+                        group_dct[str(g)] = [s]
+                    else:
+                        group_dct[str(g)] += [s]
+
+    for el in group_dct:
+        if len(group_dct[el]) <= friends:
+            total_group_list.append(el)
+
+    return total_group_list
+
+
 'Main block'
 
 print('''
@@ -289,6 +313,13 @@ while not marker:
     else:
         print('Неверная комманда')
         marker = False
+
+# friend_in_group = 10
+# print('Выполняется поиск групп с общим числом друзей в группе не более {}'.format(friend_in_group))
+# total_group = total_group_find(working_file_name, friend_in_group)
+# print('Найдено {} групп с колиеством общих друзей не более {} человек.'.format(len(total_group), friend_in_group))
+# print(total_group)
+
 
 print('\nРабота завершена. Спасибо.')
 
