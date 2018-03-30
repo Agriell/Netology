@@ -52,6 +52,7 @@ def get_friends_list(user_id):
         'version': 5.73
     }
     response = ((requests.get('https://api.vk.com/method/friends.get', params)).json())['response']
+    time.sleep(0.35)
 
     return response
 
@@ -72,6 +73,8 @@ def translate(short_name):
             'https://api.vk.com/method/utils.resolveScreenName',
             params
         )).json())['response']['object_id']
+    time.sleep(0.35)
+
     return user_id
 
 
@@ -100,6 +103,8 @@ def get_user_id(link):
     }
     # print(user_name)
     user_id = ((requests.get('https://api.vk.com/method/users.get', params_users_get)).json())['response'][0]['id']
+    time.sleep(0.35)
+
     # print(user_id)
     return user_id
 
@@ -119,6 +124,7 @@ def get_users_groups(user_id):
         'count': None
     }
     user_groups = ((requests.get('https://api.vk.com/method/groups.get', params)).json())['response']['items']
+    time.sleep(0.35)
 
     return user_groups
 
@@ -204,6 +210,7 @@ def get_group_info(group_id):
             'fields': ['members_count']
     }
     group_info = ((requests.get('https://api.vk.com/method/groups.getById', params)).json())['response']
+    time.sleep(0.35)
 
     return group_info
 
